@@ -1,20 +1,18 @@
   
 import torch
 import torch.nn as nn
+from transformers.modeling_distilbert import DistilBertPreTrainedModel, DistilBertModel, DistilBertConfig
 from torchcrf import CRF
-from transformers.models.roberta.modeling_roberta import RobertaPreTrainedModel
-from transformers.models.xlm_roberta.modeling_xlm_roberta import XLMRobertaModel
-
 from .module import IntentClassifier, SlotClassifier
 
 
-class JointXLMR(RobertaPreTrainedModel):
+class JointDistilBERT(DistilBertPreTrainedModel):
     def __init__(self, config, args, intent_label_lst, slot_label_lst):
-        super(JointXLMR, self).__init__(config)
+        super(JointDistilBERT, self).__init__(config)
         self.args = args
         self.num_intent_labels = len(intent_label_lst)
         self.num_slot_labels = len(slot_label_lst)
-        self.roberta = XLMRobertaModel(config)  # Load pretrained bert
+        self.roberta = JointDistilBERT(config)  # Load pretrained bert
         self.intent_classifier = IntentClassifier(config.hidden_size, self.num_intent_labels, args.dropout_rate)
         self.slot_classifier = SlotClassifier(
             config.hidden_size,
