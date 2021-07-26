@@ -60,6 +60,7 @@ def compute_metrics(intent_preds, intent_labels, slot_preds, slot_labels):
     results.update(intent_result)
     results.update(slot_result)
     results.update(sementic_result)
+    results["mean_intent_slot"] = mean_intent_slot
 
     return results
 
